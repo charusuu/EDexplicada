@@ -1,133 +1,134 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <locale.h>
 
-
-// Definição da estrutura do nó da lista
+// DefiniÃ§Ã£o da estrutura do nÃ³ da lista
 struct No {
     int dado;
     struct No* prox;
 };
 
-// Definição da estrutura da lista com descritor
+// DefiniÃ§Ã£o da estrutura da lista com descritor
 struct DescritorLista {
-    struct No* inicio;  // Ponteiro para o início da lista
+    struct No* inicio;  // Ponteiro para o inÃ­cio da lista
 };
 
-// Função para inicializar a lista com descritor
+// FunÃ§Ã£o para inicializar a lista com descritor
 void inicializarLista(struct DescritorLista* lista) {
-    lista->inicio = NULL;  // Define o início da lista como NULL (lista vazia)
+    lista->inicio = NULL;  // Define o inÃ­cio da lista como NULL (lista vazia)
 }
 
-// Função para criar um novo nó
+// FunÃ§Ã£o para criar um novo nÃ³
 struct No* criarNo(int dado) {
-    // Aloca memória para um novo nó
+    // Aloca memÃ³ria para um novo nÃ³
     struct No* novoNo = (struct No*)malloc(sizeof(struct No));
-    novoNo->dado = dado;   // Define o dado do novo nó como o valor recebido
-    novoNo->prox = NULL;   // Define o próximo nó como NULL (final da lista)
-    return novoNo;         // Retorna o ponteiro para o novo nó criado
+    novoNo->dado = dado;   // Define o dado do novo nÃ³ como o valor recebido
+    novoNo->prox = NULL;   // Define o prÃ³ximo nÃ³ como NULL (final da lista)
+    return novoNo;         // Retorna o ponteiro para o novo nÃ³ criado
 }
 
-// Função para inserir um nó na lista com descritor de forma ordenada
+// FunÃ§Ã£o para inserir um nÃ³ na lista com descritor de forma ordenada
 void inserirOrdenado(struct DescritorLista* lista, int dado) {
-    struct No* novoNo = criarNo(dado);  // Cria um novo nó com o dado recebido
+    struct No* novoNo = criarNo(dado);  // Cria um novo nÃ³ com o dado recebido
     struct No* atual = lista->inicio;   // Ponteiro para percorrer a lista
-    struct No* anterior = NULL;         // Ponteiro para o nó anterior ao atual
+    struct No* anterior = NULL;         // Ponteiro para o nÃ³ anterior ao atual
 
-    // Encontra a posição correta para inserir o novo nó mantendo a ordem crescente
+    // Encontra a posiÃ§Ã£o correta para inserir o novo nÃ³ mantendo a ordem crescente
     while (atual != NULL && atual->dado < dado) {
-        anterior = atual;               // Atualiza o nó anterior
-        atual = atual->prox;            // Avança para o próximo nó
+        anterior = atual;               // Atualiza o nÃ³ anterior
+        atual = atual->prox;            // AvanÃ§a para o prÃ³ximo nÃ³
     }
 
-    // Insere o novo nó na posição correta
+    // Insere o novo nÃ³ na posiÃ§Ã£o correta
     if (anterior == NULL) {
-        novoNo->prox = lista->inicio;   // Novo nó aponta para o início da lista
-        lista->inicio = novoNo;         // Atualiza o início da lista
+        novoNo->prox = lista->inicio;   // Novo nÃ³ aponta para o inÃ­cio da lista
+        lista->inicio = novoNo;         // Atualiza o inÃ­cio da lista
     } else {
-        anterior->prox = novoNo;        // Nó anterior aponta para o novo nó
-        novoNo->prox = atual;           // Novo nó aponta para o nó atual
+        anterior->prox = novoNo;        // NÃ³ anterior aponta para o novo nÃ³
+        novoNo->prox = atual;           // Novo nÃ³ aponta para o nÃ³ atual
     }
 }
 
-// Função para imprimir os elementos da lista com descritor
+// FunÃ§Ã£o para imprimir os elementos da lista com descritor
 void imprimirLista(struct DescritorLista* lista) {
     struct No* atual = lista->inicio;   // Ponteiro para percorrer a lista
 
-    // Percorre a lista e imprime os dados dos nós
+    // Percorre a lista e imprime os dados dos nÃ³s
     while (atual != NULL) {
-        printf("%d -> ", atual->dado);  // Imprime o dado do nó atual
-        atual = atual->prox;            // Avança para o próximo nó
+        printf("%d -> ", atual->dado);  // Imprime o dado do nÃ³ atual
+        atual = atual->prox;            // AvanÃ§a para o prÃ³ximo nÃ³
     }
     printf("NULL\n");                   // Indica o final da lista
 }
 
-// Função para calcular o valor médio dos elementos da lista
+// FunÃ§Ã£o para calcular o valor mÃ©dio dos elementos da lista
 float calcularMedia(struct DescritorLista* lista) {
-    float soma = 0;                     // Inicializa a variável para somar os dados
-    int quantidade = 0;                 // Inicializa a variável para contar os elementos
+    float soma = 0;                     // Inicializa a variÃ¡vel para somar os dados
+    int quantidade = 0;                 // Inicializa a variÃ¡vel para contar os elementos
     struct No* atual = lista->inicio;   // Ponteiro para percorrer a lista
 
     // Percorre a lista para calcular a soma e a quantidade de elementos
     while (atual != NULL) {
-        soma += atual->dado;            // Adiciona o dado do nó à soma
+        soma += atual->dado;            // Adiciona o dado do nÃ³ Ã  soma
         quantidade++;                   // Incrementa a quantidade de elementos
-        atual = atual->prox;            // Avança para o próximo nó
+        atual = atual->prox;            // AvanÃ§a para o prÃ³ximo nÃ³
     }
 
-    // Retorna a média dos dados da lista
+    // Retorna a mÃ©dia dos dados da lista
     return soma / quantidade;
 }
 
-// Função para remover o primeiro nó imediatamente superior ao valor médio
+// FunÃ§Ã£o para remover o primeiro nÃ³ imediatamente superior ao valor mÃ©dio
 void removerPrimeiroNoAcimaDaMedia(struct DescritorLista* lista, float media) {
     struct No* atual = lista->inicio;   // Ponteiro para percorrer a lista
-    struct No* anterior = NULL;         // Ponteiro para o nó anterior ao atual
+    struct No* anterior = NULL;         // Ponteiro para o nÃ³ anterior ao atual
 
-    // Encontra o primeiro nó com valor maior que a média
+    // Encontra o primeiro nÃ³ com valor maior que a mÃ©dia
     while (atual != NULL && atual->dado <= media) {
-        anterior = atual;               // Atualiza o nó anterior
-        atual = atual->prox;            // Avança para o próximo nó
+        anterior = atual;               // Atualiza o nÃ³ anterior
+        atual = atual->prox;            // AvanÃ§a para o prÃ³ximo nÃ³
     }
 
-    // Remove o nó encontrado (se existir)
+    // Remove o nÃ³ encontrado (se existir)
     if (atual != NULL) {
         if (anterior == NULL) {
-            lista->inicio = atual->prox;    // Atualiza o início da lista
+            lista->inicio = atual->prox;    // Atualiza o inÃ­cio da lista
         } else {
-            anterior->prox = atual->prox;   // Remove o nó da lista
+            anterior->prox = atual->prox;   // Remove o nÃ³ da lista
         }
-        free(atual);                        // Libera a memória do nó removido
+        free(atual);                        // Libera a memÃ³ria do nÃ³ removido
     }
 }
 
-// Função principal (main)
+// FunÃ§Ã£o principal (main)
 int main() {
+    setlocale(LC_ALL,"Portuguese");
     struct DescritorLista lista;            // Declara uma lista com descritor
     inicializarLista(&lista);               // Inicializa a lista (vazia)
 
     int numNos;
-    printf("Quantos nós você deseja inserir na lista? ");
-    scanf("%d", &numNos);                   // Lê o número de nós a serem inseridos
+    printf("Quantos nÃ³s vocÃª deseja inserir na lista? ");
+    scanf("%d", &numNos);                   // LÃª o nÃºmero de nÃ³s a serem inseridos
 
-    // Loop para inserir os nós na lista
+    // Loop para inserir os nÃ³s na lista
     int i;
     for (i = 0; i < numNos; i++) {
         int dado;
-        printf("Insira o valor do nó %d: ", i + 1);
-        scanf("%d", &dado);                 // Lê o valor do nó a ser inserido
-        inserirOrdenado(&lista, dado);      // Insere o nó na lista de forma ordenada
+        printf("Insira o valor do nÃ³ %d: ", i + 1);
+        scanf("%d", &dado);                 // LÃª o valor do nÃ³ a ser inserido
+        inserirOrdenado(&lista, dado);      // Insere o nÃ³ na lista de forma ordenada
     }
 
     printf("Lista criada:\n");
-    imprimirLista(&lista);                  // Imprime a lista após inserção dos nós
+    imprimirLista(&lista);                  // Imprime a lista apÃ³s inserÃ§Ã£o dos nÃ³s
 
-    float media = calcularMedia(&lista);     // Calcula a média dos elementos na lista
-    printf("O valor médio dos elementos da lista é: %.2f\n", media);
+    float media = calcularMedia(&lista);     // Calcula a mÃ©dia dos elementos na lista
+    printf("O valor mÃ©dio dos elementos da lista Ã©: %.2f\n", media);
 
-    // Remove o primeiro nó imediatamente superior à média
+    // Remove o primeiro nÃ³ imediatamente superior Ã  mÃ©dia
     removerPrimeiroNoAcimaDaMedia(&lista, media);
-    printf("Lista após remover o primeiro nó imediatamente superior à média:\n");
-    imprimirLista(&lista);                  // Imprime a lista após remoção do nó
+    printf("Lista apÃ³s remover o primeiro nÃ³ imediatamente superior Ã  mÃ©dia:\n");
+    imprimirLista(&lista);                  // Imprime a lista apÃ³s remoÃ§Ã£o do nÃ³
 
     return 0;                               // Retorna 0 para indicar que o programa foi executado com sucesso
 }
